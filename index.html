@@ -338,7 +338,7 @@
                 <div class="note-box">
                     <p style="margin: 0;">
                         <strong>Why controlled access?</strong><br>
-                        We are providing <strong>$10 in free AI credits</strong> to testers. To ensure these go to serious business use cases (and avoid personal 'planner app' projects), we manually verify requests via business email.
+                        We are providing <strong>$10 in free AI credits</strong> to testers. To ensure these go to serious business use cases, we <strong>do not accept personal emails</strong> (Gmail, Yahoo, etc.).
                     </p>
                 </div>
 
@@ -373,11 +373,22 @@
 
     <script>
         // --- PERSISTENCE CHECK ---
-        // Check if user has already unlocked credentials in the past
         document.addEventListener('DOMContentLoaded', function() {
+            // If user has unlocked before, keep header unlocked (no modal)
             if(localStorage.getItem('dhq_workshop_unlocked') === 'true') {
                 unlockHeaderUI();
-                // We don't show the modal on reload, just unlock the header
+                
+                // Also update form to show 'already unlocked' state
+                const formContainer = document.querySelector('.beta-form-container');
+                if(formContainer) {
+                    formContainer.innerHTML = `
+                         <div style="text-align: center; padding: 2rem;">
+                            <span style="font-size: 3rem;">✅</span>
+                            <h3 style="color: #10b981; margin-top: 1rem;">Already Verified</h3>
+                            <p style="color: #9ca3af;">You have already unlocked the workshop credentials. Scroll to the top to view them.</p>
+                        </div>
+                    `;
+                }
             }
         });
 
@@ -525,7 +536,6 @@
 
         // --- UNLOCKING LOGIC ---
         function unlockHeaderUI() {
-            // Unlocks the header section specifically
             const container = document.getElementById('credentials-container');
             container.classList.remove('cred-box-locked');
             container.classList.add('cred-box-unlocked');
@@ -556,11 +566,11 @@
                 const mailingListInput = form.querySelector('input[name="mailingList"]');
                 
                 const businessName = businessNameInput.value.trim();
-                const email = emailInput.value.trim();
+                const email = emailInput.value.trim().toLowerCase();
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 const joinMailingList = mailingListInput.checked;
 
-                // STRICT VALIDATION: If these fail, the code stops here. API is NEVER called.
+                // 1. Check for Empty
                 if (!businessName) {
                     alert("Please enter your Business Name.");
                     return;
@@ -569,6 +579,19 @@
                 if (!email || !emailRegex.test(email)) {
                     alert("Please enter a valid email address.");
                     return;
+                }
+
+                // 2. CHECK FOR GENERIC EMAIL PROVIDERS
+                const forbiddenDomains = [
+                    'gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 
+                    'live.com', 'icloud.com', 'aol.com', 'protonmail.com', 
+                    'mail.com', 'yandex.com', 'zoho.com'
+                ];
+                
+                const domain = email.split('@')[1];
+                if (forbiddenDomains.includes(domain)) {
+                    alert("⚠️ Access Restricted\n\nPlease enter a valid BUSINESS email address.\nPersonal email providers (Gmail, Yahoo, etc.) are not accepted for this workshop.");
+                    return; // STOP EXECUTION HERE
                 }
 
                 // --- CAPTCHA CHECK ---
@@ -600,8 +623,8 @@
                     
                     if (response.ok) {
                         // Check Response Logic
-                        if (resJson.valid_email === "valid") {
-                            // 1. Persist State (Cookie/Localstorage replacement)
+                        if (resJson.valid_email === "yes") {
+                            // 1. Persist State
                             localStorage.setItem('dhq_workshop_unlocked', 'true');
 
                             // 2. Unlock UI immediately
