@@ -30,7 +30,9 @@
       "title": "3. About DronaHQ",
       "logoUrl": "https://www.dronahq.com/wp-content/uploads/2024/11/DronaHQ-Logo_Dark-1.png",
       "website": "https://www.dronahq.com",
-      "description": "DronaHQ is a low-code platform that helps engineering teams build internal tools, dashboards, and admin panels 10x faster.\n\nWith the new <strong>Agentic AI</strong> capabilities, DronaHQ allows you to build autonomous agents that can securely access your internal databases, APIs, and documents to perform complex tasks without human intervention."
+      "description": "DronaHQ is an AI powered developer platform that helps startups build internal tools and operational AI systems without burning engineering time on repetitive frontend and glue work. As teams scale, developers get pulled into building admin panels, dashboards, workflows, and one off tools that are critical to operations but slow down product velocity. DronaHQ solves this by giving teams a structured way to ship internal apps and agents quickly, while keeping security, control, and maintainability intact.
+The platform offers two core capabilities. The first is a <strong>low code and vibe coding platform</strong> for building internal tools such as admin panels, ops dashboards, approval flows, and data driven apps using a mix of visual building blocks and code. The second is an <strong>agentic platform</strong> for building AI agents for operations, including RAG agents, SQL agents, and workflow driven agents that connect directly to internal data and systems.
+Fast growing teams at companies like PhonePe, Purplle, Mondelez, Yubi, and Traveazy use DronaHQ to reduce internal tool backlog, ship faster with smaller teams, and let developers focus on core product work instead of internal plumbing."
     },
     "instructor": {
       "title": "2. About Your Instructor",
