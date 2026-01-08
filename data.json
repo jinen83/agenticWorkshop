@@ -1,0 +1,43 @@
+{
+  "agentData": [
+    {
+      "id": "recruiter",
+      "name": "🧑‍💼 Recruiter Agent",
+      "description": "Screens candidate text/resumes and drafts outreach emails automatically.",
+      "instructions": "You are an expert Technical Recruiter. Your goal is to screen candidates and schedule interviews.\n\n1. When you receive a candidate resume text, analyze it against the Job Description.\n2. If they are a good match (>80%), draft a polite email inviting them to an interview.\n3. If they are not a match, draft a polite rejection email offering to keep their resume on file.\n4. Always maintain a professional, encouraging tone.",
+      "tools": ["Gmail (Send Email)", "Google Sheets (Log Candidate)"],
+      "kb": "Job_Description_2026.pdf"
+    },
+    {
+      "id": "hr",
+      "name": "🤝 HR Generalist",
+      "description": "Answering employee policy questions based on the handbook.",
+      "instructions": "You are \"PeopleOp,\" a helpful HR Generalist Assistant.\n\nYour goal is to answer employee questions regarding company policy.\n1. Always consult the Knowledge Base (Employee Handbook) before answering.\n2. If the answer is not in the handbook, direct them to email humanresources@company.com.\n3. Never make up policy rules.\n4. Be empathetic and concise.",
+      "tools": ["None (Pure Chat)", "Slack (Optional)"],
+      "kb": "Employee_Handbook_2026.pdf"
+    },
+    {
+      "id": "learning",
+      "name": "📚 L&D Agent",
+      "description": "Suggests courses and builds study plans based on skill gaps.",
+      "instructions": "You are an L&D Course Recommender.\n\n1. Ask the user what skill they want to improve (e.g., Leadership, Python).\n2. Ask for their current proficiency level (Beginner, Intermediate).\n3. Based on their answer, recommend 3 courses from the Course Catalog in the Knowledge Base.\n4. Create a simple weekly study plan for them.",
+      "tools": ["Web Search (Bing/Google)"],
+      "kb": "Internal_Course_Catalog.csv"
+    }
+  ],
+  "workshopMeta": {
+    "dronahq": {
+      "title": "3. About DronaHQ",
+      "logoUrl": "https://www.dronahq.com/wp-content/uploads/2024/11/DronaHQ-Logo_Dark-1.png",
+      "website": "https://www.dronahq.com",
+      "description": "DronaHQ is a low-code platform that helps engineering teams build internal tools, dashboards, and admin panels 10x faster.\n\nWith the new <strong>Agentic AI</strong> capabilities, DronaHQ allows you to build autonomous agents that can securely access your internal databases, APIs, and documents to perform complex tasks without human intervention."
+    },
+    "instructor": {
+      "title": "2. About Your Instructor",
+      "name": "Instructor Name",
+      "role": "AI Consultant & Workshop Lead",
+      "imageUrl": "https://placehold.co/400x400?text=Profile+Pic",
+      "bio": "Hello! I am a passionate advocate for Generative AI and automation. My mission is to help HR and Operations professionals leverage the power of Agentic workflows to reduce manual toil and increase strategic impact.\n\nIf you enjoyed this workshop, feel free to connect with me on LinkedIn or ask me any questions about the DronaHQ platform."
+    }
+  }
+}
