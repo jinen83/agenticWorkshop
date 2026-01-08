@@ -104,7 +104,7 @@
 
         /* --- BETA FORM STYLES --- */
         .beta-form-container { 
-            background: #111827; /* Dark BG */
+            background: #111827;
             color: white; 
             padding: 2.5rem; 
             border-radius: 12px; 
@@ -154,7 +154,7 @@
 
         .cta-button {
             width: 100%;
-            background: #10b981; /* Emerald Green */
+            background: #10b981;
             color: white;
             border: none;
             padding: 1rem;
@@ -205,16 +205,20 @@
             <div class="access-card">
                 <h2 style="color: white; border: none; margin: 0; font-size: 1.5rem;">Step 1: Access Agent Builder</h2>
                 <p>Click the button below to launch the DronaHQ environment.</p>
-                <a href="#" target="https://agents.dronahq.com" class="access-btn">👉 Launch Builder</a>
+                <a href="https://agents.dronahq.com/" target="_blank" class="access-btn">👉 Launch Builder</a>
                 <div style="margin-top: 1rem; opacity: 0.9; font-family: monospace;">
                     User: <strong>workshop_user</strong> | Pass: <strong>build2026</strong>
                 </div>
             </div>
         </section>
 
-        <section id="about-me"></section>
+        <section id="about-me">
+            <p>Loading instructor details...</p>
+        </section>
 
-        <section id="about-dronahq"></section>
+        <section id="about-dronahq">
+             <p>Loading company details...</p>
+        </section>
 
         <section id="concepts">
             <h2>4. Core Concepts</h2>
@@ -245,7 +249,9 @@
             <h2>6. Agent Templates</h2>
             <div class="tab-container">
                 <div class="tabs" id="tab-header"></div>
-                <div class="tab-content-area" id="tab-body"></div>
+                <div class="tab-content-area" id="tab-body">
+                    <p style="color: #64748b; padding: 1rem;">Loading templates...</p>
+                </div>
             </div>
         </section>
 
@@ -303,77 +309,47 @@
     </main>
 
     <script>
-        // --- DATA SOURCE: AGENT TEMPLATES ---
-        const agentData = [
-            {
-                id: "recruiter",
-                name: "🧑‍💼 Recruiter Agent",
-                description: "Screens candidate text/resumes and drafts outreach emails automatically.",
-                instructions: `You are an expert Technical Recruiter. Your goal is to screen candidates and schedule interviews.
-
-1. When you receive a candidate resume text, analyze it against the Job Description.
-2. If they are a good match (>80%), draft a polite email inviting them to an interview.
-3. If they are not a match, draft a polite rejection email offering to keep their resume on file.
-4. Always maintain a professional, encouraging tone.`,
-                tools: ["Gmail (Send Email)", "Google Sheets (Log Candidate)"],
-                kb: "Job_Description_2026.pdf"
-            },
-            {
-                id: "hr",
-                name: "🤝 HR Generalist",
-                description: "Answering employee policy questions based on the handbook.",
-                instructions: `You are "PeopleOp," a helpful HR Generalist Assistant. 
-
-Your goal is to answer employee questions regarding company policy.
-1. Always consult the Knowledge Base (Employee Handbook) before answering.
-2. If the answer is not in the handbook, direct them to email humanresources@company.com.
-3. Never make up policy rules.
-4. Be empathetic and concise.`,
-                tools: ["None (Pure Chat)", "Slack (Optional)"],
-                kb: "Employee_Handbook_2026.pdf"
-            },
-            {
-                id: "learning",
-                name: "📚 L&D Agent",
-                description: "Suggests courses and builds study plans based on skill gaps.",
-                instructions: `You are an L&D Course Recommender.
-
-1. Ask the user what skill they want to improve (e.g., Leadership, Python).
-2. Ask for their current proficiency level (Beginner, Intermediate).
-3. Based on their answer, recommend 3 courses from the Course Catalog in the Knowledge Base.
-4. Create a simple weekly study plan for them.`,
-                tools: ["Web Search (Bing/Google)"],
-                kb: "Internal_Course_Catalog.csv"
-            }
-        ];
-
-       // --- DATA SOURCE: ABOUT SECTIONS ---
-        const workshopMeta = {
-            dronahq: {
-                title: “3. About DronaHQ”,
-                logoUrl: “https://www.dronahq.com/wp-content/uploads/2024/11/DronaHQ-Logo_Dark-1.png”,
-                website: “https://www.dronahq.com”,
-                description: `DronaHQ is an AI powered developer platform that helps startups build internal tools and operational AI systems without burning engineering time on repetitive frontend and glue work. As teams scale, developers get pulled into building admin panels, dashboards, workflows, and one off tools that are critical to operations but slow down product velocity. DronaHQ solves this by giving teams a structured way to ship internal apps and agents quickly, while keeping security, control, and maintainability intact.
-The platform offers two core capabilities. The first is a <strong>low code and vibe coding platform</strong> for building internal tools such as admin panels, ops dashboards, approval flows, and data driven apps using a mix of visual building blocks and code. The second is an <strong>agentic platform</strong> for building AI agents for operations, including RAG agents, SQL agents, and workflow driven agents that connect directly to internal data and systems.
-Fast growing teams at companies like PhonePe, Purplle, Mondelez, Yubi, and Traveazy use DronaHQ to reduce internal tool backlog, ship faster with smaller teams, and let developers focus on core product work instead of internal plumbing.
-`
-            },
-            instructor: {
-                title: “2. About Your Instructor”,
-                name: “Aharna Haque”,
-                role: “Developer Advocate”,
-                imageUrl: “https://www.dronahq.com/wp-content/uploads/2026/01/WhatsApp-Image-2025-06-30-at-18.29.18.jpeg”,
-                bio: `Hello! I am a developer advocate on a mission: building tools, growing communities, and testing the limits Generative AI and automation. My mission is to help HR and Operations professionals leverage the power of Agentic workflows to reduce manual toil and increase strategic impact.
-If you enjoyed this workshop, feel free to connect with me on LinkedIn or ask me any questions about the DronaHQ platform.`
-            }
-        };
-
-        // --- RENDER LOGIC: AGENT TABS ---
-        const tabHeader = document.getElementById('tab-header');
-        const tabBody = document.getElementById('tab-body');
+        // Global variables to hold fetched data
+        let agentData = [];
+        let workshopMeta = {};
         let activeIndex = 0;
 
+        // --- FETCH DATA FUNCTION ---
+        async function loadData() {
+            try {
+                const response = await fetch('data.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                
+                // Assign to globals
+                agentData = data.agentData;
+                workshopMeta = data.workshopMeta;
+
+                // Render content
+                renderTabs();
+                renderAboutSections();
+
+            } catch (error) {
+                console.error("Could not load data.json", error);
+                document.getElementById('about-me').innerHTML = `
+                    <div style="background:#fee2e2; color:#b91c1c; padding:1rem; border-radius:8px;">
+                        <strong>Error loading data:</strong><br>
+                        This page must be run on a local server (e.g., Live Server) to load 'data.json'.<br>
+                        Browser security blocks reading local files directly.
+                    </div>
+                `;
+            }
+        }
+
+        // --- RENDER LOGIC: AGENT TABS ---
         function renderTabs() {
+            if(!agentData || agentData.length === 0) return;
+
+            const tabHeader = document.getElementById('tab-header');
+            const tabBody = document.getElementById('tab-body');
+            
             tabHeader.innerHTML = '';
             tabBody.innerHTML = '';
 
@@ -406,6 +382,8 @@ If you enjoyed this workshop, feel free to connect with me on LinkedIn or ask me
 
         // --- RENDER LOGIC: ABOUT SECTIONS ---
         function renderAboutSections() {
+            if(!workshopMeta.dronahq) return;
+
             // Render DronaHQ
             const companySection = document.getElementById('about-dronahq');
             const coData = workshopMeta.dronahq;
@@ -535,9 +513,9 @@ If you enjoyed this workshop, feel free to connect with me on LinkedIn or ask me
             });
         }
 
-        // Initialize
-        renderTabs();
-        renderAboutSections();
+        // Initialize Data Load
+        loadData();
+
     </script>
 </body>
 </html>
