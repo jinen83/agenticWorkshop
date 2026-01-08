@@ -18,6 +18,7 @@
             --linkedin: #0077b5;
             --success-color: #10b981;
             --secondary-text: #9ca3af;
+            --locked-color: #f59e0b;
         }
 
         * { box-sizing: border-box; }
@@ -90,6 +91,21 @@
             color: white; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;
         }
         .copy-btn:hover { background: rgba(255,255,255,0.3); }
+
+        /* Download Link Style */
+        .file-download-card {
+            display: flex; align-items: center; justify-content: space-between;
+            background: #f1f5f9; border: 1px solid #cbd5e1;
+            padding: 0.75rem 1rem; border-radius: 6px; margin-top: 0.5rem;
+            transition: all 0.2s;
+        }
+        .file-info { display: flex; align-items: center; gap: 8px; font-weight: 500; color: #334155; }
+        .download-btn-sm {
+            background: white; border: 1px solid #bfdbfe; color: var(--primary);
+            padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600;
+            text-decoration: none; display: flex; align-items: center; gap: 5px; cursor: pointer;
+        }
+        .download-btn-sm:hover { background: #eff6ff; border-color: var(--primary); }
 
         /* About & Profile Styles */
         .about-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
@@ -191,7 +207,7 @@
         <a href="#build-guide" class="nav-link">5. Build Guide</a>
         <a href="#agent-templates" class="nav-link">6. Agent Templates</a>
         <a href="#testing" class="nav-link">7. Testing & Publish</a>
-        <a href="#next-steps" class="nav-link">8. Next Steps ($10 Credit)</a>
+        <a href="#next-steps" class="nav-link">8. Claim Account</a>
         <a href="#share" class="nav-link">9. Share Certificate</a>
     </nav>
 
@@ -199,26 +215,31 @@
         
         <section id="welcome">
             <img src="https://www.dronahq.com/wp-content/uploads/2024/11/DronaHQ-Logo_Dark-1.png" alt="DronaHQ Logo" class="mobile-logo">
-            <h1>Hands on Workshop - Building Ai Agents with DronaHQ Agentic Ai Platform </h1>
+            <h1>Building Agentic AI</h1>
             <p style="font-size: 1.1rem; color: #64748b;">Welcome to the workshop. This page contains all the resources, prompts, and links you need.</p>
 
             <div class="access-card">
                 <h2 style="color: white; border: none; margin: 0; font-size: 1.5rem;">Step 1: Access Agent Builder</h2>
                 <p>Click the button below to launch the DronaHQ environment.</p>
                 <a href="https://agents.dronahq.com/" target="_blank" class="access-btn">👉 Launch Builder</a>
-                <div style="margin-top: 1rem; opacity: 0.9; font-family: monospace;">
-                    User: <strong>workshop@dronahq.com</strong> | Pass: <strong>qwerty</strong>
+                
+                <div id="credentials-container" style="margin-top: 1.5rem; background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3);">
+                    <div id="credentials-lock">
+                        <span style="font-size: 1.5rem;">🔒</span><br>
+                        <span style="font-size: 0.9rem; opacity: 0.9;">Credentials Locked</span><br>
+                        <a href="#next-steps" style="color: white; text-decoration: underline; font-size: 0.9rem;">Claim your account below to unlock</a>
+                    </div>
+                    <div id="credentials-unlocked" style="display: none; font-family: monospace;">
+                        User: <strong>workshop@dronahq.com</strong><br>
+                        Pass: <strong>qwerty</strong>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section id="about-me">
-            <p>Loading instructor details...</p>
-        </section>
+        <section id="about-me"></section>
 
-        <section id="about-dronahq">
-             <p>Loading company details...</p>
-        </section>
+        <section id="about-dronahq"></section>
 
         <section id="concepts">
             <h2>4. Core Concepts</h2>
@@ -249,9 +270,7 @@
             <h2>6. Agent Templates</h2>
             <div class="tab-container">
                 <div class="tabs" id="tab-header"></div>
-                <div class="tab-content-area" id="tab-body">
-                    <p style="color: #64748b; padding: 1rem;">Loading templates...</p>
-                </div>
+                <div class="tab-content-area" id="tab-body"></div>
             </div>
         </section>
 
@@ -269,8 +288,8 @@
             <h2>8. Claim Your Account</h2>
             
             <div class="beta-form-container">
-                <h3 style="margin-bottom: 1rem;">Want to test this with me?</h3>
-                <p style="color: var(--secondary-text);">This service is not yet public, but I am opening up spots for beta users.</p>
+                <h3 style="margin-bottom: 1rem;">Unlock Your Credentials</h3>
+                <p style="color: var(--secondary-text);">Please verify your business email to receive the workshop credentials and your $10 AI credits.</p>
                 
                 <div class="note-box">
                     <p style="margin: 0;">
@@ -290,7 +309,7 @@
 
                     <div class="cf-turnstile" data-sitekey="0x4AAAAAACGumSDn6kRgf5HC" data-theme="dark"></div>
                     
-                    <button type="submit" class="cta-button" style="margin-top: 0.5rem;">Request Beta Access</button>
+                    <button type="submit" class="cta-button" style="margin-top: 0.5rem;">Verify & Unlock Access</button>
                 </form>
             </div>
         </section>
@@ -309,47 +328,61 @@
     </main>
 
     <script>
-        // Global variables to hold fetched data
-        let agentData = [];
-        let workshopMeta = {};
-        let activeIndex = 0;
-
-        // --- FETCH DATA FUNCTION ---
-        async function loadData() {
-            try {
-                const response = await fetch('data.json');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
-                
-                // Assign to globals
-                agentData = data.agentData;
-                workshopMeta = data.workshopMeta;
-
-                // Render content
-                renderTabs();
-                renderAboutSections();
-
-            } catch (error) {
-                console.error("Could not load data.json", error);
-                document.getElementById('about-me').innerHTML = `
-                    <div style="background:#fee2e2; color:#b91c1c; padding:1rem; border-radius:8px;">
-                        <strong>Error loading data:</strong><br>
-                        This page must be run on a local server (e.g., Live Server) to load 'data.json'.<br>
-                        Browser security blocks reading local files directly.
-                    </div>
-                `;
+        // --- EMBEDDED DATA ---
+        const agentData = [
+            {
+                id: "recruiter",
+                name: "🧑‍💼 Recruiter Agent",
+                description: "Screens candidate text/resumes and drafts outreach emails automatically.",
+                instructions: `You are an expert Technical Recruiter. Your goal is to screen candidates and schedule interviews.\n\n1. When you receive a candidate resume text, analyze it against the Job Description.\n2. If they are a good match (>80%), draft a polite email inviting them to an interview.\n3. If they are not a match, draft a polite rejection email offering to keep their resume on file.\n4. Always maintain a professional, encouraging tone.`,
+                tools: ["Gmail (Send Email)", "Google Sheets (Log Candidate)"],
+                kb: "Job_Description_2026.pdf",
+                fileContent: "JOB DESCRIPTION: SENIOR SOFTWARE ENGINEER\n\nResponsibilities:\n- Build scalable APIs.\n- Mentor junior devs.\n\nRequirements:\n- 5+ years in Python/Node.js.\n- Experience with AWS."
+            },
+            {
+                id: "hr",
+                name: "🤝 HR Generalist",
+                description: "Answering employee policy questions based on the handbook.",
+                instructions: `You are "PeopleOp," a helpful HR Generalist Assistant.\n\nYour goal is to answer employee questions regarding company policy.\n1. Always consult the Knowledge Base (Employee Handbook) before answering.\n2. If the answer is not in the handbook, direct them to email humanresources@company.com.\n3. Never make up policy rules.\n4. Be empathetic and concise.`,
+                tools: ["None (Pure Chat)", "Slack (Optional)"],
+                kb: "Employee_Handbook_2026.pdf",
+                fileContent: "EMPLOYEE HANDBOOK 2026\n\n1. Leave Policy: You get 20 days PTO.\n2. Remote Work: 3 days in office, 2 days remote.\n3. Benefits: Health, Dental, Vision included."
+            },
+            {
+                id: "learning",
+                name: "📚 L&D Agent",
+                description: "Suggests courses and builds study plans based on skill gaps.",
+                instructions: `You are an L&D Course Recommender.\n\n1. Ask the user what skill they want to improve (e.g., Leadership, Python).\n2. Ask for their current proficiency level (Beginner, Intermediate).\n3. Based on their answer, recommend 3 courses from the Course Catalog in the Knowledge Base.\n4. Create a simple weekly study plan for them.`,
+                tools: ["Web Search (Bing/Google)"],
+                kb: "Internal_Course_Catalog.csv",
+                fileContent: "Course Name,Level,Link\nPython Basics,Beginner,https://lms.company.com/python101\nAdvanced Leadership,Expert,https://lms.company.com/lead\nPublic Speaking,Intermediate,https://lms.company.com/speak"
             }
-        }
+        ];
+
+        const workshopMeta = {
+            dronahq: {
+                title: "3. About DronaHQ",
+                logoUrl: "https://www.dronahq.com/wp-content/uploads/2024/11/DronaHQ-Logo_Dark-1.png",
+                website: "https://www.dronahq.com",
+                description: `DronaHQ is a low-code platform that helps engineering teams build internal tools, dashboards, and admin panels 10x faster. \n\nWith the new <strong>Agentic AI</strong> capabilities, DronaHQ allows you to build autonomous agents that can securely access your internal databases, APIs, and documents to perform complex tasks without human intervention.`
+            },
+            instructor: {
+                title: "2. About Your Instructor",
+                name: "Instructor Name", // CHANGE THIS
+                role: "AI Consultant & Workshop Lead", // CHANGE THIS
+                imageUrl: "https://placehold.co/400x400?text=Profile+Pic", // CHANGE THIS
+                bio: `Hello! I am a passionate advocate for Generative AI and automation. My mission is to help HR and Operations professionals leverage the power of Agentic workflows to reduce manual toil and increase strategic impact.\n\nIf you enjoyed this workshop, feel free to connect with me on LinkedIn or ask me any questions about the DronaHQ platform.`
+            }
+        };
 
         // --- RENDER LOGIC: AGENT TABS ---
+        let activeIndex = 0;
+        const tabHeader = document.getElementById('tab-header');
+        const tabBody = document.getElementById('tab-body');
+
         function renderTabs() {
             if(!agentData || agentData.length === 0) return;
 
-            const tabHeader = document.getElementById('tab-header');
-            const tabBody = document.getElementById('tab-body');
-            
             tabHeader.innerHTML = '';
             tabBody.innerHTML = '';
 
@@ -374,7 +407,19 @@
 
                 <div style="display:flex; gap: 2rem; flex-wrap:wrap;">
                     <div><h4>B) Tools Needed</h4><ul>${agent.tools.map(t => `<li>${t}</li>`).join('')}</ul></div>
-                    <div><h4>C) Knowledge Base</h4><div style="background:#f1f5f9; padding:0.5rem 1rem; border-radius:4px; border:1px dashed #94a3b8;">📄 ${agent.kb}</div></div>
+                    <div>
+                        <h4>C) Knowledge Base</h4>
+                        <div class="file-download-card">
+                            <div class="file-info">
+                                <span>📄</span>
+                                <span>${agent.kb}</span>
+                            </div>
+                            <button class="download-btn-sm" onclick="downloadFile(${activeIndex}, event)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                Download File
+                            </button>
+                        </div>
+                    </div>
                 </div>
             `;
             tabBody.innerHTML = contentHTML;
@@ -382,8 +427,6 @@
 
         // --- RENDER LOGIC: ABOUT SECTIONS ---
         function renderAboutSections() {
-            if(!workshopMeta.dronahq) return;
-
             // Render DronaHQ
             const companySection = document.getElementById('about-dronahq');
             const coData = workshopMeta.dronahq;
@@ -421,6 +464,24 @@
             navigator.clipboard.writeText(text).then(() => alert("Instructions copied!"));
         }
 
+        function downloadFile(index, event) {
+            event.preventDefault();
+            const agent = agentData[index];
+            const content = agent.fileContent || "Sample content for " + agent.kb;
+            const filename = agent.kb;
+
+            const element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+            element.setAttribute('download', filename);
+
+            element.style.display = 'none';
+            document.body.appendChild(element);
+
+            element.click();
+
+            document.body.removeChild(element);
+        }
+
         function shareLinkedIn() {
             const postText = "Just wrapped up an incredible workshop on Agentic AI! 🚀 I successfully built my first AI Agent capable of orchestrating complex workflows. Excited to explore more productivity hacks on my new DronaHQ account. The future of work is here. 🤖✨ \n\n#DronaHQ #AgenticAI #AIWorkshop #FutureOfWork #HRTech";
             const url = `https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(postText)}`;
@@ -435,7 +496,6 @@
 
             form.addEventListener('submit', function(e) {
                 e.preventDefault(); 
-                console.log("1. Form submit triggered");
                 
                 // Get values
                 const businessNameInput = form.querySelector('input[name="businessName"]');
@@ -460,13 +520,8 @@
 
                 // --- CAPTCHA CHECK ---
                 let token = null;
-                // Check if Turnstile is actually loaded
                 if (typeof turnstile !== 'undefined') {
-                    try {
-                        token = turnstile.getResponse();
-                    } catch (err) {
-                        console.warn("Turnstile warning:", err);
-                    }
+                    try { token = turnstile.getResponse(); } catch (err) { console.warn("Turnstile warning:", err); }
                 }
 
                 // Loading State
@@ -484,21 +539,47 @@
 
                 fetch('https://automations.dronahq.com/webhook/693fcf23b6619f7471dd8876', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 })
-                .then(response => {
-                    console.log("Response received:", response.status);
+                .then(async (response) => {
+                    const resJson = await response.json(); // Parse JSON
+                    
                     if (response.ok) {
-                        form.innerHTML = `
-                            <div style="padding: 2rem 0; text-align: center;">
-                                <span style="font-size: 3rem;">🎉</span>
-                                <p style="color: var(--success-color); font-weight: bold; font-size: 1.5rem; margin-top: 1rem;">Request Sent!</p>
-                                <p style="color: #9ca3af; font-size: 1.1rem;">We'll verify your request and reach out to <strong>${email}</strong> soon.</p>
-                            </div>
-                        `;
+                        // Check if valid_email is "yes"
+                        if (resJson.valid_email === "yes") {
+                            // 1. Show Success Message with Credentials in Form
+                            form.innerHTML = `
+                                <div style="padding: 2rem 0; text-align: center;">
+                                    <span style="font-size: 3rem;">🎉</span>
+                                    <p style="color: var(--success-color); font-weight: bold; font-size: 1.5rem; margin-top: 1rem;">Access Granted!</p>
+                                    <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 8px; margin-top: 1rem; border: 1px solid var(--success-color);">
+                                        <p style="margin:0 0 0.5rem 0; color: #e5e7eb;">Here are your workshop credentials:</p>
+                                        <p style="font-family: monospace; font-size: 1.1rem; margin: 0.5rem 0;">
+                                            User: <strong style="color: #fff;">workshop@dronahq.com</strong><br>
+                                            Pass: <strong style="color: #fff;">qwerty</strong>
+                                        </p>
+                                    </div>
+                                    <p style="color: #9ca3af; font-size: 0.9rem; margin-top:1rem;">We've also unlocked the top section for you.</p>
+                                </div>
+                            `;
+
+                            // 2. Unlock Step 1 UI
+                            document.getElementById('credentials-lock').style.display = 'none';
+                            document.getElementById('credentials-unlocked').style.display = 'block';
+                            document.getElementById('credentials-container').style.background = '#10b981'; // Green bg
+                            document.getElementById('credentials-container').style.border = '1px solid #059669';
+
+                        } else {
+                            // Email received but not validated as business/eligible
+                             form.innerHTML = `
+                                <div style="padding: 2rem 0; text-align: center;">
+                                    <span style="font-size: 3rem;">⏳</span>
+                                    <p style="color: #60a5fa; font-weight: bold; font-size: 1.5rem; margin-top: 1rem;">Request Received</p>
+                                    <p style="color: #9ca3af; font-size: 1.1rem;">We are reviewing your request for <strong>${email}</strong>.<br>If eligible, credentials will be emailed shortly.</p>
+                                </div>
+                            `;
+                        }
                     } else {
                         throw new Error('Network response was not ok');
                     }
@@ -513,9 +594,9 @@
             });
         }
 
-        // Initialize Data Load
-        loadData();
-
+        // Initialize (No async fetch needed)
+        renderTabs();
+        renderAboutSections();
     </script>
 </body>
 </html>
