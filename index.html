@@ -596,7 +596,7 @@
                     const resJson = await response.json(); 
                     
                     if (response.ok) {
-                        if (resJson.valid_email === "yes") {
+                        if (resJson.valid_email === "valid") {
                             // 1. Persist State
                             localStorage.setItem('dhq_workshop_unlocked', 'true');
                             // 2. Unlock UI
